@@ -1,0 +1,7 @@
+*.DS_Store
+
+*.class
+*META-INF*
+
+evosuite-report/
+evosuite-tests/
