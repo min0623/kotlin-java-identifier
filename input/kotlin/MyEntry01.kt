@@ -1,0 +1,1 @@
+class MyEntry01<K, V>(val key: K, var value: V)
