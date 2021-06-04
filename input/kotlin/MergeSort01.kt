@@ -3,7 +3,7 @@ internal class MergeSort01 {
     // Merges two subarrays of arr[].
     // First subarray is arr[l..m]
     // Second subarray is arr[m+1..r]
-    fun merge(arr: IntArray, l: Int, m: Int, r: Int) {
+    private fun merge(arr: IntArray, l: Int, m: Int, r: Int) {
         // Find sizes of two subarrays to be merged
         val n1 = m - l + 1
         val n2 = r - m
@@ -49,7 +49,10 @@ internal class MergeSort01 {
 
     // Main function that sorts arr[l..r] using
     // merge()
-    fun sort(arr: IntArray, l: Int, r: Int) {
+    fun sort(arr: IntArray?, l: Int, r: Int) {
+        if (arr == null) {
+        throw NullPointerException();
+    }
         if (l < r) {
             // Find the middle point
             val m = l + (r - l) / 2
