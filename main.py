@@ -15,6 +15,7 @@ def evosuite_test(java_file, kotlin_file):
     ]
     case_specific_libs = [
         'lib/commons-net-3.8.0.jar',
+        'lib/commons-lang3-3.12.0.jar'
     ]
     kotlin_libs = [
         'lib/kotlin-stdlib.jar',
