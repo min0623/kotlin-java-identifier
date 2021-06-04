@@ -15,7 +15,6 @@ def evosuite_test(java_file, kotlin_file):
     ]
     case_specific_libs = [
         'lib/commons-net-3.8.0.jar',
-        'lib/commons-lang3-3.12.0.jar'
     ]
     kotlin_libs = [
         'lib/kotlin-stdlib.jar',
@@ -71,7 +70,8 @@ if __name__ == '__main__':
             if not os.path.isdir(kotlin_dir):
                 raise FileNotFoundError('Kotlin directory does not exist.')
             result = dict()
-            java_files = [java_dir + '/' + file for file in os.listdir(java_dir) if file.endswith(".java")]
+            failed_result = dict()
+            java_files = sorted([java_dir + '/' + file for file in os.listdir(java_dir) if file.endswith(".java")])
             for java_file in java_files:
                 class_name = java_file.split('/')[-1].split('.')[0]
                 try:
@@ -88,13 +88,39 @@ if __name__ == '__main__':
                         class_test = '(' + class_name + '_ESTest)'
                         failed_tests = sorted(['test' + str(line.split(class_test)[0].split('test')[1]) for line in kotlin_run_stdout if class_test in line])
                         failed_out = '(' + ', '.join(failed_tests) + ')'
-                        result[class_name] = str(n_tests - n_failed) + '/' + str(n_tests) + ' passed, ' + str(n_failed) +  '/' + str(n_tests) + ' failed. ' + failed_out
+                        result[class_name] = str(n_tests - n_failed) + '/' + str(n_tests) + ' passed, ' + str(n_failed) + ' failed. ' + failed_out
+                        with open('evosuite-tests/' + class_name + '_ESTest.java', 'r') as t:
+                            test_file = t.readlines()
+                            for failed_test in failed_tests:
+                                class_test = class_name + '_ESTest.' + failed_test
+                                failed_line = [int(''.join([d for d in line.split(class_test)[1].split('.java:')[1] if d.isdigit()])) for line in kotlin_run_stdout if class_test in line][0]
+                                test_file[failed_line-1] = '▶' + test_file[failed_line-1][1:]
+                            test_file = ''.join(test_file)
+                        tests = test_file.split('@Test')
+                        failed_tests_out = []
+                        for test in tests[1:]:
+                            for failed_test in failed_tests:
+                                if failed_test in test:
+                                    failed_tests.remove(failed_test)
+                                    test_lines = test.split('\n')
+                                    while failed_test not in test_lines[0]:
+                                        test_lines = test_lines[1:]
+                                    while '  }' not in test_lines[-1]:
+                                        test_lines = test_lines[:-1]
+                                    failed_tests_out += ['\n'.join(test_lines)]
+                                    break
+                        failed_result[class_name] = '\n\n'.join(failed_tests_out)
                 except Exception as ex:
                     result[class_name] = ex
             max_len_name = max([len(class_name) for class_name in result])
             print()
             for class_name in result:
                 print(class_name.rjust(max_len_name, ' ') + ':', result[class_name])
+            if len(failed_result) != 0:
+                print()
+                for class_name in failed_result:
+                    print(class_name)
+                    print(failed_result[class_name], end='\n\n')
         except Exception as e:
             print(e)
     else:
@@ -108,15 +134,21 @@ if __name__ == '__main__':
             else:
                 n_tests = int(''.join([d for d in java_run_stdout[-1] if d.isdigit()]))
             if 'OK' in kotlin_run_stdout[-1]:
-                print('\nAll', n_tests, 'tests passed for kotlin class file.')
+                print('\nAll', n_tests, 'tests passed in kotlin class file.')
             else:
                 n_failed = int(''.join([d for d in kotlin_run_stdout[-1].split(',')[1] if d.isdigit()]))
                 class_test = '(' + class_name + '_ESTest)'
                 failed_tests = sorted(['test' + str(line.split(class_test)[0].split('test')[1]) for line in kotlin_run_stdout if class_test in line])
                 failed_out = '(' + ', '.join(failed_tests) + ')'
-                print('\n' + str(n_failed), 'of', n_tests, 'tests', failed_out, 'failed for kotlin class file.', end='\n\n')
+                print('\n' + str(n_failed), 'of', n_tests, 'tests', failed_out, 'failed in kotlin class file.', end='\n\n')
                 with open('evosuite-tests/' + class_name + '_ESTest.java', 'r') as t:
-                    test_file = t.read()
+                    test_file = t.readlines()
+                    for failed_test in failed_tests:
+                        class_test = class_name + '_ESTest.' + failed_test
+                        failed_line = [int(''.join([d for d in line.split(class_test)[1].split('.java:')[1] if d.isdigit()])) for line in kotlin_run_stdout if class_test in line][0]
+                        test_file[failed_line-1] = '▶' + test_file[failed_line-1][1:]
+                    test_file = ''.join(test_file)
+                print(class_name)
                 tests = test_file.split('@Test')
                 for test in tests[1:]:
                     for failed_test in failed_tests:
