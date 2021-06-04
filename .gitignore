@@ -5,3 +5,6 @@
 
 evosuite-report/
 evosuite-tests/
+
+.idea/
+*.iml
