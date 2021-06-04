@@ -12,7 +12,7 @@ internal class Car01 : Vehicle01() {
 
     companion object {
         @JvmStatic
-        fun main(args: Array<String>) {
+        fun main(args: Array<String>?) {
 
             // Create a myCar object
             val myCar = Car01()

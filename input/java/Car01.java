@@ -1,5 +1,3 @@
-import javax.validation.constraints.NotNull;
-
 class Vehicle01 {
     protected String brand = "Ford";        // Vehicle attribute
     public void honk() {                    // Vehicle method
@@ -9,7 +7,7 @@ class Vehicle01 {
 
 class Car01 extends Vehicle01 {
     private final String modelName = "Mustang";    // Car attribute
-    public static void main(@NotNull String[] args) {
+    public static void main(String[] args) {
 
         // Create a myCar object
         Car01 myCar = new Car01();
