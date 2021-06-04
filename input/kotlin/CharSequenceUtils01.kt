@@ -52,7 +52,10 @@ object CharSequenceUtils01 {
      * @return the index where the search sequence was found
      */
     @JvmStatic
-    fun indexOf(cs: CharSequence, searchChar: CharSequence, start: Int): Int {
+    fun indexOf(cs: CharSequence?, searchChar: CharSequence?, start: Int): Int {
+        if (cs == null || searchChar == null) {
+            throw NullPointerException()
+        }
         if (cs is String) {
             return cs.indexOf(searchChar.toString(), start)
         }
@@ -115,7 +118,10 @@ object CharSequenceUtils01 {
      * @since 3.6 updated to behave more like `String`
      */
     @JvmStatic
-    fun indexOf(cs: CharSequence, searchChar: Int, start: Int): Int {
+    fun indexOf(cs: CharSequence?, searchChar: Int, start: Int): Int {
+        if (cs == null) {
+            throw NullPointerException()
+        }
         var start = start
         if (cs is String) {
             return cs.indexOf(searchChar.toChar(), start)
@@ -243,8 +249,11 @@ object CharSequenceUtils01 {
      * @since 3.6 updated to behave more like `String`
      */
     @JvmStatic
-    fun lastIndexOf(cs: CharSequence, searchChar: Int, start: Int): Int {
+    fun lastIndexOf(cs: CharSequence?, searchChar: Int, start: Int): Int {
         var start = start
+        if (cs == null) {
+            throw NullPointerException()
+        }
         if (cs is String) {
             return cs.lastIndexOf(searchChar.toChar(), start)
         }
@@ -294,9 +303,12 @@ object CharSequenceUtils01 {
      * @return whether the region matched
      */
     @JvmStatic
-    fun regionMatches(cs: CharSequence, ignoreCase: Boolean, thisStart: Int,
-                      substring: CharSequence, start: Int, length: Int): Boolean {
-        if (cs is String && substring is String) {
+    fun regionMatches(cs: CharSequence?, ignoreCase: Boolean, thisStart: Int,
+                      substring: CharSequence?, start: Int, length: Int): Boolean {
+                        if (cs == null || substring == null) {
+                            throw NullPointerException()
+                        }
+                        if (cs is String && substring is String) {
             return cs.regionMatches(thisStart, substring, start, length, ignoreCase = ignoreCase)
         }
         var index1 = thisStart

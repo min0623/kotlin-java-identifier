@@ -48,7 +48,7 @@ public class CharSequenceUtils01 {
      * @param start the start index
      * @return the index where the search sequence was found
      */
-    static int indexOf(final CharSequence cs, final CharSequence searchChar, final int start) {
+    private static int indexOf(final CharSequence cs, final CharSequence searchChar, final int start) {
         if (cs instanceof String) {
             return ((String) cs).indexOf(searchChar.toString(), start);
         }
@@ -108,7 +108,7 @@ public class CharSequenceUtils01 {
      * @return the index where the search char was found, -1 if not found
      * @since 3.6 updated to behave more like {@code String}
      */
-    static int indexOf(final CharSequence cs, final int searchChar, int start) {
+    private static int indexOf(final CharSequence cs, final int searchChar, int start) {
         if (cs instanceof String) {
             return ((String) cs).indexOf(searchChar, start);
         }
@@ -146,7 +146,7 @@ public class CharSequenceUtils01 {
      * @param start the start index
      * @return the index where the search sequence was found
      */
-    static int lastIndexOf(final CharSequence cs, final CharSequence searchChar, int start) {
+    private static int lastIndexOf(final CharSequence cs, final CharSequence searchChar, int start) {
         if (searchChar == null || cs == null) {
             return NOT_FOUND;
         }
@@ -239,7 +239,7 @@ public class CharSequenceUtils01 {
      * @return the index where the search char was found, -1 if not found
      * @since 3.6 updated to behave more like {@code String}
      */
-    static int lastIndexOf(final CharSequence cs, final int searchChar, int start) {
+    private static int lastIndexOf(final CharSequence cs, final int searchChar, int start) {
         if (cs instanceof String) {
             return ((String) cs).lastIndexOf(searchChar, start);
         }
@@ -288,7 +288,7 @@ public class CharSequenceUtils01 {
      * @param length character length of the region
      * @return whether the region matched
      */
-    static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,
+    private static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,
             final CharSequence substring, final int start, final int length)    {
         if (cs instanceof String && substring instanceof String) {
             return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
