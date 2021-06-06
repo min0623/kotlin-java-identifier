@@ -209,7 +209,7 @@ class IMAPClient02 : IMAP() {
     @Throws(IOException::class)
     fun status(mailboxName: String?, itemNames: Array<String?>?): Boolean {
         // MUTATION 2: Get the require conditions wrong while expanding by De Morgan's
-        require(itemNames != null && itemNames.size >= 1) { "STATUS command requires at least one data item name" }
+        require(itemNames != null && itemNames.size >= 0) { "STATUS command requires at least one data item name" }
         val sb = StringBuilder()
         sb.append(quoteMailboxName(mailboxName))
         sb.append(" (")
